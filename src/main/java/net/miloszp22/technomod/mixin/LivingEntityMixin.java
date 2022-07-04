@@ -17,35 +17,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public class LivingEntityMixin {
-
+    // Defining Entity
     private LivingEntity thisEntity = (LivingEntity)(Object)this;
+    // Defining Target
     private Entity target;
     @Inject(method = "baseTick",at = @At("HEAD"))
     public void baseTick(CallbackInfo ci) {
-        float explosiondistance = 3;
+        float explosionradius = 3;
+        // Checking if Entity is a pig and target isn't null.
         if (this.getClass().equals(PigEntity.class) && target != null){
 
 
                 if (!target.isAlive()){
+                    // Respawn Fix
                     target = null;
-
                 }
-                else if (target instanceof PlayerEntity){
-                    PlayerEntity player = (PlayerEntity)target;
-                    if (!player.isInvulnerableTo(main.TECHNOBLADED) && (thisEntity.getDistance(target) > explosiondistance && thisEntity.getEntityWorld() == target.getEntityWorld()))
-                        thisEntity.world.createExplosion(thisEntity, net.miloszp22.technomod.main.TECHNOBLADED, null,target.getPosition().getX(),target.getPosition().getY(),target.getPosition().getZ(),explosiondistance,false, Explosion.Mode.BREAK);
-                }
-                else if (thisEntity.getDistance(target) > explosiondistance && thisEntity.getEntityWorld() == target.getEntityWorld()){
-                    thisEntity.world.createExplosion(thisEntity, net.miloszp22.technomod.main.TECHNOBLADED, null,target.getPosition().getX(),target.getPosition().getY(),target.getPosition().getZ(),explosiondistance,false, Explosion.Mode.BREAK);
+                else if (thisEntity.getDistance(target) > explosionradius && thisEntity.getEntityWorld() == target.getEntityWorld() && !thisEntity.isInvulnerable()){
+                    // Entity go boom boom
+                    thisEntity.world.createExplosion(thisEntity, net.miloszp22.technomod.main.TECHNOBLADED, null,target.getPosition().getX(),target.getPosition().getY(),target.getPosition().getZ(),explosionradius,false, Explosion.Mode.BREAK);
                 }
         }
     }
     @Inject(method = "damageEntity",at = @At("HEAD"),cancellable = true)
-    public void hurt(DamageSource source, float damage, CallbackInfo ci) {
+    public void onEntityDamage(DamageSource source, float damage, CallbackInfo ci) {
         if (this.getClass().equals(PigEntity.class)) {
             String s = thisEntity.getName().getString();
-            System.out.println("damage: " + String.valueOf(damage));
             if (s != null && ("Techno".equals(s) || "Technoblade".equals(s) || "Alex".equals(s)) && thisEntity.getHealth() - damage <= 0) {
+                // Playing Totem Sound
                 thisEntity.playSound(SoundEvents.ITEM_TOTEM_USE, 0.15F, 1.0F);
                 thisEntity.setHealth(1.0F);
                 thisEntity.clearActivePotions();
@@ -53,6 +51,7 @@ public class LivingEntityMixin {
                 thisEntity.addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
                 thisEntity.addPotionEffect(new EffectInstance(Effects.FIRE_RESISTANCE, 800, 0));
                 thisEntity.world.setEntityState(thisEntity, (byte) 35);
+                // Gets target
                 target = source.getTrueSource();
                 ci.cancel();
             }

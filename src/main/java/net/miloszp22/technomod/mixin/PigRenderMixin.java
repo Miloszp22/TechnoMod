@@ -10,7 +10,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(PigRenderer.class)
 public class PigRenderMixin {
+    // File Location
     private static final ResourceLocation TECHNO_LOCATION = new ResourceLocation("textures/entity/pig/technoblade.png");
+    // Injecting Code
     @Inject(method = "getEntityTexture(Lnet/minecraft/entity/passive/PigEntity;)Lnet/minecraft/util/ResourceLocation;",at = @At("HEAD"),cancellable = true)
     public void getEntityTexture(PigEntity p_110775_1_, CallbackInfoReturnable<ResourceLocation> cir){
         String s = p_110775_1_.getName().getString();
