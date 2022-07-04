@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.miloszp22.technomod.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "technomod.refmap.json",
+  "mixins": [
+    "LivingEntityMixin"
+  ],
+  "client": [
+  "PigRenderMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
