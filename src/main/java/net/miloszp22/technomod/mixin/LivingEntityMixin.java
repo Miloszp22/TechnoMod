@@ -21,7 +21,7 @@ public class LivingEntityMixin {
     private LivingEntity thisEntity = (LivingEntity)(Object)this;
     // Defining Target
     private Entity target;
-    @Inject(method = "baseTick",at = @At("HEAD"))
+    @Inject(method = "baseTick",at = @At("TAIL"))
     public void baseTick(CallbackInfo ci) {
         float explosionradius = 3;
         // Checking if Entity is a pig and target isn't null.
