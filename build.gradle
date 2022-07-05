@@ -15,7 +15,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'net.miloszp22'
-version = '1.0-ALPHA'
+version = '1.0.1-ALPHA'
 
 java {
     archivesBaseName = 'TechnoMod'
